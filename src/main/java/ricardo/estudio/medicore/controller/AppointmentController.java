@@ -7,8 +7,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ricardo.estudio.medicore.dto.ApiResponse;
 import ricardo.estudio.medicore.model.Appointment;
+import ricardo.estudio.medicore.model.Status;
 import ricardo.estudio.medicore.service.AppointmentService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Validated
 @RestController
@@ -43,5 +45,22 @@ public class AppointmentController {
     public  ResponseEntity<ApiResponse<Appointment>> cancelAppointment(@PathVariable Integer appointmentId){
         Appointment cancelAppointment = appointmentService.cancelAppointment(appointmentId);
         return new ResponseEntity<>(new ApiResponse<>("Appointment cancelled", cancelAppointment), HttpStatus.OK);
+    }
+
+    @PutMapping("/{appointmentId}/updateStatus")
+    public ResponseEntity<ApiResponse<Appointment>> updateStatus(@PathVariable Integer appointmentId){
+        Appointment updateStatus = appointmentService.updateAppointmentState(appointmentId);
+        return new ResponseEntity<>(new ApiResponse<>("Status updated", updateStatus), HttpStatus.OK);
+    }
+
+    @GetMapping("/{appointmentId}/find")
+    public ResponseEntity<ApiResponse<List<Appointment>>>findByDoctorIdAndAppointmentDate(@PathVariable Integer appointmentId, @RequestParam LocalDateTime appointmentDate){
+        List<Appointment> findByDoctorIdAndAppointmentDate = appointmentService.findByDoctorIdAndAppointmentDate(appointmentId, appointmentDate);
+        return new ResponseEntity<>(new ApiResponse<>("List found", findByDoctorIdAndAppointmentDate), HttpStatus.OK);
+    }
+    @GetMapping("/patient/{patientId}/status/{status}")
+    public ResponseEntity<ApiResponse<List<Appointment>>> findByPatientIdAndStatus(@PathVariable Integer patientId, @PathVariable Status status){
+        List<Appointment> findByPatientIdAndStatus = appointmentService.findByPatientIdAndStatus(patientId, status);
+        return new ResponseEntity<>(new ApiResponse<>("Found", findByPatientIdAndStatus), HttpStatus.OK);
     }
 }

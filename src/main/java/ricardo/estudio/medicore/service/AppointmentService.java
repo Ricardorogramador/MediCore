@@ -7,6 +7,8 @@ import ricardo.estudio.medicore.model.Doctor;
 import ricardo.estudio.medicore.model.Patient;
 import ricardo.estudio.medicore.model.Status;
 import ricardo.estudio.medicore.repository.AppointmentRepository;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -46,6 +48,7 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
     }
 
+    @Transactional
     public Appointment  cancelAppointment(Integer appointmentId){
         Appointment appointment = findAppointmentById(appointmentId);
         if (appointment.getStatus() != Status.SCHEDULED){
@@ -55,5 +58,21 @@ public class AppointmentService {
        return appointmentRepository.save(appointment);
     }
 
-    //TODO: Create the query methods for filters, a
+    @Transactional
+    public Appointment updateAppointmentState(Integer appointmentId){
+        Appointment appointment = findAppointmentById(appointmentId);
+        appointment.setStatus(Status.COMPLETED);
+        return appointmentRepository.save(appointment);
+    }
+
+    public List<Appointment>findByDoctorIdAndAppointmentDate(Integer appointmentId, LocalDateTime AppointmentDate){
+        findAppointmentById(appointmentId);
+        return appointmentRepository.findAppointmentByDoctor_IdAndAppointmentDate(appointmentId, AppointmentDate);
+    }
+
+    public List<Appointment> findByPatientIdAndStatus(Integer patientId, Status status){
+        patientService.findPatientById(patientId);
+        return appointmentRepository.findAppointmentByPatient_IdAndStatus(patientId, status);
+    }
+
 }
