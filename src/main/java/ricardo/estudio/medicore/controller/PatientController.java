@@ -35,6 +35,6 @@ public class PatientController {
     @PostMapping
     public  ResponseEntity<ApiResponse<Patient>> addPatient(@Valid @RequestBody Patient patient){
         Patient newPatient = patientService.addPatient(patient);
-        return new ResponseEntity<>(new ApiResponse<>("Patient added", newPatient), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse<>("Patient added", newPatient), HttpStatus.CREATED);
     }
 }

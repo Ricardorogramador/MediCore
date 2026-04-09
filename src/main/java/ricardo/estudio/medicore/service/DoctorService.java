@@ -2,6 +2,7 @@ package ricardo.estudio.medicore.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import ricardo.estudio.medicore.model.Appointment;
 import ricardo.estudio.medicore.model.Doctor;
 import ricardo.estudio.medicore.model.Speciality;
 import ricardo.estudio.medicore.model.Status;
@@ -56,7 +57,9 @@ public class DoctorService {
     @Transactional
     public Doctor removeDoctor(Integer doctorId){
         Doctor doctor = findDoctorById(doctorId);
+        List<Appointment> appointments = appointmentRepository.findByDoctor(doctor);
         appointmentRepository.findByDoctor(doctor).forEach(a -> a.setStatus(Status.CANCELLED));
+        appointmentRepository.saveAll(appointments);
         doctorRepository.delete(doctor);
       return doctor;
     }
