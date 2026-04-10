@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediCore – Sistema de Gestión Médica</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-icon">🏥</span>
+      <span class="sidebar__logo-text">MediCore</span>
+    </div>
+    <nav class="sidebar__nav">
+      <a href="#" class="nav-link active" data-section="dashboard">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a href="#" class="nav-link" data-section="patients">
+        <span class="nav-icon">👤</span> Pacientes
+      </a>
+      <a href="#" class="nav-link" data-section="doctors">
+        <span class="nav-icon">🩺</span> Doctores
+      </a>
+      <a href="#" class="nav-link" data-section="specialities">
+        <span class="nav-icon">🔬</span> Especialidades
+      </a>
+      <a href="#" class="nav-link" data-section="appointments">
+        <span class="nav-icon">📅</span> Citas
+      </a>
+    </nav>
+    <div class="sidebar__footer">
+      <span>v1.0.0</span>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+    <!-- Top bar -->
+    <header class="topbar">
+      <button class="topbar__menu-btn" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+      <h1 class="topbar__title" id="pageTitle">Dashboard</h1>
+      <div class="topbar__actions">
+        <span class="topbar__status" id="apiStatus">
+          <span class="status-dot"></span><span id="apiStatusText"> Conectando…</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- Sections -->
+    <div class="content">
+
+      <!-- ===== DASHBOARD ===== -->
+      <section id="section-dashboard" class="section active">
+        <div class="stats-grid">
+          <div class="stat-card stat-card--blue">
+            <div class="stat-card__icon">👤</div>
+            <div class="stat-card__info">
+              <span class="stat-card__value" id="statPatients">–</span>
+              <span class="stat-card__label">Pacientes</span>
+            </div>
+          </div>
+          <div class="stat-card stat-card--green">
+            <div class="stat-card__icon">🩺</div>
+            <div class="stat-card__info">
+              <span class="stat-card__value" id="statDoctors">–</span>
+              <span class="stat-card__label">Doctores</span>
+            </div>
+          </div>
+          <div class="stat-card stat-card--purple">
+            <div class="stat-card__icon">🔬</div>
+            <div class="stat-card__info">
+              <span class="stat-card__value" id="statSpecialities">–</span>
+              <span class="stat-card__label">Especialidades</span>
+            </div>
+          </div>
+          <div class="stat-card stat-card--orange">
+            <div class="stat-card__icon">📅</div>
+            <div class="stat-card__info">
+              <span class="stat-card__value" id="statAppointments">–</span>
+              <span class="stat-card__label">Citas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="card">
+            <div class="card__header">
+              <h2 class="card__title">Citas Recientes</h2>
+            </div>
+            <div class="card__body">
+              <div id="dashboardAppointments" class="list-placeholder">Cargando…</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__header">
+              <h2 class="card__title">Distribución por Estado</h2>
+            </div>
+            <div class="card__body">
+              <div id="statusChart" class="status-chart"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PATIENTS ===== -->
+      <section id="section-patients" class="section">
+        <div class="section-header">
+          <h2>Pacientes</h2>
+          <button class="btn btn--primary" id="btnAddPatient">+ Nuevo Paciente</button>
+        </div>
+        <div class="card">
+          <div class="card__body">
+            <div class="table-wrapper">
+              <table class="table" id="patientsTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Fecha de Nacimiento</th>
+                  </tr>
+                </thead>
+                <tbody id="patientsBody">
+                  <tr><td colspan="5" class="table__empty">Cargando…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== DOCTORS ===== -->
+      <section id="section-doctors" class="section">
+        <div class="section-header">
+          <h2>Doctores</h2>
+          <button class="btn btn--primary" id="btnAddDoctor">+ Nuevo Doctor</button>
+        </div>
+        <div class="card">
+          <div class="card__body">
+            <div class="table-wrapper">
+              <table class="table" id="doctorsTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Matrícula</th>
+                    <th>Especialidad</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="doctorsBody">
+                  <tr><td colspan="6" class="table__empty">Cargando…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SPECIALITIES ===== -->
+      <section id="section-specialities" class="section">
+        <div class="section-header">
+          <h2>Especialidades</h2>
+          <button class="btn btn--primary" id="btnAddSpeciality">+ Nueva Especialidad</button>
+        </div>
+        <div class="card">
+          <div class="card__body">
+            <div class="table-wrapper">
+              <table class="table" id="specialitiesTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                  </tr>
+                </thead>
+                <tbody id="specialitiesBody">
+                  <tr><td colspan="3" class="table__empty">Cargando…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== APPOINTMENTS ===== -->
+      <section id="section-appointments" class="section">
+        <div class="section-header">
+          <h2>Citas Médicas</h2>
+          <button class="btn btn--primary" id="btnAddAppointment">+ Nueva Cita</button>
+        </div>
+
+        <div class="filter-bar">
+          <label for="filterStatus">Filtrar por estado:</label>
+          <select id="filterStatus" class="input">
+            <option value="">Todos</option>
+            <option value="SCHEDULED">Programadas</option>
+            <option value="COMPLETED">Completadas</option>
+            <option value="CANCELLED">Canceladas</option>
+          </select>
+        </div>
+
+        <div class="card">
+          <div class="card__body">
+            <div class="table-wrapper">
+              <table class="table" id="appointmentsTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Paciente</th>
+                    <th>Doctor</th>
+                    <th>Fecha y Hora</th>
+                    <th>Motivo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="appointmentsBody">
+                  <tr><td colspan="7" class="table__empty">Cargando…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /content -->
+  </main>
+
+  <!-- ===== MODALS ===== -->
+
+  <!-- Patient Modal -->
+  <div class="modal" id="modalPatient" role="dialog" aria-modal="true" aria-labelledby="modalPatientTitle">
+    <div class="modal__backdrop"></div>
+    <div class="modal__dialog">
+      <div class="modal__header">
+        <h3 id="modalPatientTitle">Nuevo Paciente</h3>
+        <button class="modal__close" data-modal="modalPatient" aria-label="Cerrar">✕</button>
+      </div>
+      <form id="formPatient" class="modal__body" novalidate>
+        <div class="form-group">
+          <label for="patientName">Nombre completo *</label>
+          <input type="text" id="patientName" class="input" placeholder="Juan García" required />
+        </div>
+        <div class="form-group">
+          <label for="patientEmail">Email *</label>
+          <input type="email" id="patientEmail" class="input" placeholder="juan@email.com" required />
+        </div>
+        <div class="form-group">
+          <label for="patientPhone">Teléfono * (7-15 dígitos)</label>
+          <input type="tel" id="patientPhone" class="input" placeholder="5551234567" minlength="7" maxlength="15" required />
+        </div>
+        <div class="form-group">
+          <label for="patientDob">Fecha de Nacimiento *</label>
+          <input type="date" id="patientDob" class="input" required />
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn--secondary" data-modal="modalPatient">Cancelar</button>
+          <button type="submit" class="btn btn--primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Doctor Modal -->
+  <div class="modal" id="modalDoctor" role="dialog" aria-modal="true" aria-labelledby="modalDoctorTitle">
+    <div class="modal__backdrop"></div>
+    <div class="modal__dialog">
+      <div class="modal__header">
+        <h3 id="modalDoctorTitle">Nuevo Doctor</h3>
+        <button class="modal__close" data-modal="modalDoctor" aria-label="Cerrar">✕</button>
+      </div>
+      <form id="formDoctor" class="modal__body" novalidate>
+        <input type="hidden" id="doctorId" />
+        <div class="form-group">
+          <label for="doctorName">Nombre completo *</label>
+          <input type="text" id="doctorName" class="input" placeholder="Dra. María López" required />
+        </div>
+        <div class="form-group">
+          <label for="doctorEmail">Email *</label>
+          <input type="email" id="doctorEmail" class="input" placeholder="dr.lopez@hospital.com" required />
+        </div>
+        <div class="form-group">
+          <label for="doctorLicense">Número de Matrícula *</label>
+          <input type="text" id="doctorLicense" class="input" placeholder="MED-00123" required />
+        </div>
+        <div class="form-group" id="doctorSpecialityGroup">
+          <label for="doctorSpeciality">Especialidad *</label>
+          <select id="doctorSpeciality" class="input" required>
+            <option value="">Seleccionar especialidad…</option>
+          </select>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn--secondary" data-modal="modalDoctor">Cancelar</button>
+          <button type="submit" class="btn btn--primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Speciality Modal -->
+  <div class="modal" id="modalSpeciality" role="dialog" aria-modal="true" aria-labelledby="modalSpecialityTitle">
+    <div class="modal__backdrop"></div>
+    <div class="modal__dialog">
+      <div class="modal__header">
+        <h3 id="modalSpecialityTitle">Nueva Especialidad</h3>
+        <button class="modal__close" data-modal="modalSpeciality" aria-label="Cerrar">✕</button>
+      </div>
+      <form id="formSpeciality" class="modal__body" novalidate>
+        <div class="form-group">
+          <label for="specialityName">Nombre *</label>
+          <input type="text" id="specialityName" class="input" placeholder="Cardiología" required />
+        </div>
+        <div class="form-group">
+          <label for="specialityDescription">Descripción * (mín. 20 caracteres)</label>
+          <textarea id="specialityDescription" class="input" rows="3" minlength="20" placeholder="Describe la especialidad…" required></textarea>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn--secondary" data-modal="modalSpeciality">Cancelar</button>
+          <button type="submit" class="btn btn--primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Appointment Modal -->
+  <div class="modal" id="modalAppointment" role="dialog" aria-modal="true" aria-labelledby="modalAppointmentTitle">
+    <div class="modal__backdrop"></div>
+    <div class="modal__dialog">
+      <div class="modal__header">
+        <h3 id="modalAppointmentTitle">Nueva Cita</h3>
+        <button class="modal__close" data-modal="modalAppointment" aria-label="Cerrar">✕</button>
+      </div>
+      <form id="formAppointment" class="modal__body" novalidate>
+        <div class="form-group">
+          <label for="appointmentPatient">Paciente *</label>
+          <select id="appointmentPatient" class="input" required>
+            <option value="">Seleccionar paciente…</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="appointmentDoctor">Doctor *</label>
+          <select id="appointmentDoctor" class="input" required>
+            <option value="">Seleccionar doctor…</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="appointmentDate">Fecha y Hora * (futura)</label>
+          <input type="datetime-local" id="appointmentDate" class="input" required />
+        </div>
+        <div class="form-group">
+          <label for="appointmentReason">Motivo *</label>
+          <textarea id="appointmentReason" class="input" rows="3" placeholder="Describe el motivo de la consulta…" required></textarea>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn--secondary" data-modal="modalAppointment">Cancelar</button>
+          <button type="submit" class="btn btn--primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
