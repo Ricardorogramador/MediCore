@@ -333,6 +333,7 @@ async function loadDoctors() {
           <div class="action-group">
             <button class="btn btn--icon" title="Editar" data-action="edit-doctor" data-id="${d.id}">✏️</button>
             <button class="btn btn--icon" title="Eliminar" data-action="delete-doctor" data-id="${d.id}">🗑️</button>
+            <button class="btn btn--icon" title="Actualizar estado de citas" data-action="update-appt-status" data-id="${d.id}" data-name="${escHtml(d.name)}">📋</button>
           </div>
         </td>
       </tr>
@@ -360,8 +361,9 @@ document.getElementById('doctorsBody').addEventListener('click', e => {
   const btn = e.target.closest('[data-action]');
   if (!btn) return;
   const id = btn.dataset.id;
-  if (btn.dataset.action === 'edit-doctor')   openEditDoctor(id);
-  if (btn.dataset.action === 'delete-doctor') deleteDoctor(id);
+  if (btn.dataset.action === 'edit-doctor')         openEditDoctor(id);
+  if (btn.dataset.action === 'delete-doctor')       deleteDoctor(id);
+  if (btn.dataset.action === 'update-appt-status')  openUpdateApptStatus(id, btn.dataset.name);
 });
 
 async function openEditDoctor(id) {
@@ -395,6 +397,29 @@ async function deleteDoctor(id) {
     showToast(`Error: ${err.message}`, 'error');
   }
 }
+
+function openUpdateApptStatus(doctorId, doctorName) {
+  document.getElementById('apptStatusDoctorId').value = doctorId;
+  document.getElementById('apptStatusDoctorName').textContent = `Doctor: ${doctorName}`;
+  document.getElementById('apptNewStatus').value = '';
+  openModal('modalDoctorApptStatus');
+}
+
+document.getElementById('formDoctorApptStatus').addEventListener('submit', async e => {
+  e.preventDefault();
+  const doctorId = document.getElementById('apptStatusDoctorId').value;
+  const newStatus = document.getElementById('apptNewStatus').value;
+  if (!newStatus) { showToast('Selecciona un estado.', 'error'); return; }
+  try {
+    const res = await DoctorApi.updateAppointmentStatus(doctorId, newStatus);
+    const count = res.data ?? 0;
+    closeModal('modalDoctorApptStatus');
+    showToast(`Estado actualizado en ${count} cita(s).`, 'success');
+    loadDoctors();
+  } catch (err) {
+    showToast(`Error: ${err.message}`, 'error');
+  }
+});
 
 document.getElementById('formDoctor').addEventListener('submit', async e => {
   e.preventDefault();

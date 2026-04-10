@@ -71,6 +71,13 @@ const DoctorApi = {
   delete(id) {
     return apiFetch(`/api/doctor/${id}`, { method: 'DELETE' });
   },
+  /**
+   * PUT /api/doctor/{doctorId}/appointments/status?status={status}
+   * Updates the status of ALL appointments belonging to a doctor.
+   */
+  updateAppointmentStatus(doctorId, status) {
+    return apiFetch(`/api/doctor/${doctorId}/appointments/status?status=${encodeURIComponent(status)}`, { method: 'PUT' });
+  },
 };
 
 /* ── Specialities ─────────────────────────────────────────── */
