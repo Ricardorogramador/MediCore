@@ -364,6 +364,34 @@
     </div>
   </div>
 
+  <!-- Doctor Appointment Status Modal -->
+  <div class="modal" id="modalDoctorApptStatus" role="dialog" aria-modal="true" aria-labelledby="modalDoctorApptStatusTitle">
+    <div class="modal__backdrop"></div>
+    <div class="modal__dialog">
+      <div class="modal__header">
+        <h3 id="modalDoctorApptStatusTitle">Actualizar Estado de Citas</h3>
+        <button class="modal__close" data-modal="modalDoctorApptStatus" aria-label="Cerrar">✕</button>
+      </div>
+      <form id="formDoctorApptStatus" class="modal__body" novalidate>
+        <input type="hidden" id="apptStatusDoctorId" />
+        <p id="apptStatusDoctorName" style="margin-bottom:1rem;font-weight:600;"></p>
+        <div class="form-group">
+          <label for="apptNewStatus">Nuevo estado para todas las citas *</label>
+          <select id="apptNewStatus" class="input" required>
+            <option value="">Seleccionar estado…</option>
+            <option value="SCHEDULED">Programada</option>
+            <option value="COMPLETED">Completada</option>
+            <option value="CANCELLED">Cancelada</option>
+          </select>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn--secondary" data-modal="modalDoctorApptStatus">Cancelar</button>
+          <button type="submit" class="btn btn--primary">Actualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Toast notification -->
   <div id="toast" class="toast" role="alert" aria-live="polite"></div>
 
