@@ -1,8 +1,6 @@
 package ricardo.estudio.medicore.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
@@ -24,9 +22,13 @@ public class Appointment {
     private Status status = Status.SCHEDULED;
     @CreationTimestamp @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
-    @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "doctor_id") @JsonBackReference("doctor-appointments")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "doctor_id")
+    @JsonIgnoreProperties({"appointments", "speciality"})
     private Doctor doctor;
-    @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "patient_id") @JsonBackReference("patient-appointments")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "patient_id")
+    @JsonIgnoreProperties({"appointments"})
     private Patient patient;
 
     public Integer getId() {

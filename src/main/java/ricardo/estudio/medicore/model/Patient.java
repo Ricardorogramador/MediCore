@@ -23,7 +23,7 @@ public class Patient {
     private String phone;
     @NotNull @Past
     private LocalDate dateOfBirth;
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL) @JsonManagedReference("patient-appointments")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY) @JsonManagedReference("patient-appointments")
     private List<Appointment> appointments = new ArrayList<>();
 
     public Integer getId() {

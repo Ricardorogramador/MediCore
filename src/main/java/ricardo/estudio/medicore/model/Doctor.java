@@ -23,7 +23,7 @@ public class Doctor {
     private String licenseNumber;
     @ManyToOne @JoinColumn(name = "speciality_id")
     private Speciality speciality;
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL) @JsonManagedReference("doctor-appointments") @JsonIgnore
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY) @JsonManagedReference("doctor-appointments") @JsonIgnore
     private List<Appointment> appointments = new ArrayList<>();
 
     public Integer getId() {

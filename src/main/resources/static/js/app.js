@@ -483,13 +483,15 @@ function renderAppointments() {
       actions.push(`<button class="btn btn--sm btn--primary" data-action="complete-appt" data-id="${a.id}">✔ Completar</button>`);
       actions.push(`<button class="btn btn--sm btn--danger"  data-action="cancel-appt"   data-id="${a.id}">✕ Cancelar</button>`);
     }
-    // Note: doctor/patient fields are omitted from appointment responses by the backend
-    // (@JsonBackReference annotation suppresses them to avoid circular serialization).
+    // Ahora mostramos el nombre del doctor y paciente
+    const doctorName = a.doctor?.name || '–';
+    const patientName = a.patient?.name || '–';
+
     return `
       <tr>
         <td>${a.id}</td>
-        <td>–</td>
-        <td>–</td>
+        <td>${escHtml(doctorName)}</td>
+        <td>${escHtml(patientName)}</td>
         <td>${formatDateTime(a.appointmentDate)}</td>
         <td>${escHtml(a.reason)}</td>
         <td>${statusBadge(a.status)}</td>
