@@ -63,4 +63,12 @@ public class DoctorService {
         doctorRepository.delete(doctor);
       return doctor;
     }
+
+    @Transactional
+    public int updateAppointmentStatusByDoctor(Integer doctorId, Status newStatus) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new IllegalArgumentException("Doctor no encontrado"));
+
+        return doctorRepository.updateStatusByDoctor(doctor, newStatus);
+    }
 }

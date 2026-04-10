@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ricardo.estudio.medicore.dto.ApiResponse;
 import ricardo.estudio.medicore.model.Doctor;
+import ricardo.estudio.medicore.model.Status;
 import ricardo.estudio.medicore.service.DoctorService;
 
 import java.util.List;
@@ -48,5 +49,17 @@ public class DoctorController {
     public ResponseEntity<ApiResponse<Doctor>> deleteDoctor(@PathVariable Integer doctorId){
         Doctor deletedDoctor = doctorService.removeDoctor(doctorId);
         return new ResponseEntity<>(new ApiResponse<>("Doctor deleted", deletedDoctor), HttpStatus.OK);
+    }
+
+    @PutMapping("/{doctorId}/appointments/status")
+    public ResponseEntity<ApiResponse<Integer>> updateAppointmentStatusByDoctor(
+            @PathVariable Integer doctorId,
+            @RequestParam Status status) {
+
+        int updatedCount = doctorService.updateAppointmentStatusByDoctor(doctorId, status);
+        return new ResponseEntity<>(
+                new ApiResponse<>("Appointment updated " + updatedCount, updatedCount),
+                HttpStatus.OK
+        );
     }
 }

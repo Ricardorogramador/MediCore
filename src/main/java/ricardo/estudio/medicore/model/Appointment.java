@@ -24,9 +24,9 @@ public class Appointment {
     private Status status = Status.SCHEDULED;
     @CreationTimestamp @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
-    @ManyToOne @JoinColumn(name = "doctor_id") @JsonBackReference("doctor-appointments")
+    @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "doctor_id") @JsonBackReference("doctor-appointments")
     private Doctor doctor;
-    @ManyToOne @JoinColumn(name = "patient_id") @JsonBackReference("patient-appointments")
+    @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "patient_id") @JsonBackReference("patient-appointments")
     private Patient patient;
 
     public Integer getId() {
